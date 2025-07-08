@@ -1,12 +1,24 @@
 import os
+import shutil
 
 from PIL import Image
 
+from args import args
+
 def change_background(img: Image, hl: str):
     img = img.resize((15 * 256, 7 * 256))
-    img.save("prev.png")
 
-    p = os.path.join(hl, "valve", "resource", "background")
+    if args.addon:
+        po = os.path.join(hl, "valve", "resource", "background")
+        p = os.path.join(os.path.join(hl, "valve_addon") if args.output is None else args.output, "resource", "background")
+
+        if not os.path.exists(p):
+            os.makedirs(p)
+
+        for file in os.listdir(po):
+            shutil.copy(os.path.join(po, file), p)
+    else:
+        p = os.path.join(hl, "valve", "resource", "background")
 
     for i in range(7):
         for j in range(15):
